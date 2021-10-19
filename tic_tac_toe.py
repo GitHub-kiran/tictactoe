@@ -22,6 +22,7 @@ class TicTacToe:
         self.board[row][col] = choice.upper()
 
     def is_player_won(self, choice):
+        import pdb 
         choice = choice.upper()
         is_win = None
 
@@ -46,6 +47,7 @@ class TicTacToe:
                 return is_win
 
         # verify whether any diagonal is full
+        is_win = True
         for i in range(self.idx):
             if self.board[i][i] != choice:
                 is_win = False
@@ -53,6 +55,7 @@ class TicTacToe:
         if is_win:
             return is_win
 
+        is_win = True
         for i in range(self.idx):
             if self.board[i][self.idx - 1 - i] != choice:
                 is_win = False
@@ -88,8 +91,8 @@ class TicTacToe:
     def start_game(self):  
         try :     
             # Get players name
-            player1 = input("Enter first player name and choice : ") 
-            player2 = input("Enter second player name and choice : ")
+            player1 = input("Enter first player name : ") 
+            player2 = input("Enter second player name : ")
 
             # Create 3*3 board filled with "_"
             self.create_board()
@@ -101,7 +104,7 @@ class TicTacToe:
             
             # start with player 1
             # NOTE: in case if player 2 is starting the game, then it should work
-            prev_player = player1
+            prev_player = None
             prev_choice = None
             print()
 
@@ -111,7 +114,7 @@ class TicTacToe:
                     map(str, input("Enter row and column in format row col choice : ").split()))
                 print()
                 
-                # validate the inputs, if something is wrong then give 3 retries
+                # validate the inputs, if input is wrong then give 3 retries
                 max_try = 4
                 for i in range(1, max_try):
                     flag = self.validate(int(row)-1, int(col)-1, prev_choice, cur_choice)
@@ -123,9 +126,8 @@ class TicTacToe:
                     else:
                         print("you have reached max limit of 3 retries, please restart the game")
                         return
-                        # option to restart the game 
-                        # [TODO]
-                        # restart = input("do you want to restart the game ? Y/N")
+                        # [TODO] : option to restart the game 
+                        # restart = input("do you want to restart the game, type Y/N ?")
                         # if restart == "Y":
                         #     self.start_game()
                         # else:
@@ -140,7 +142,8 @@ class TicTacToe:
                 self.display_board()
 
                 # checking whether current player is won or not
-                if self.is_player_won(cur_choice):
+                if prev_player and self.is_player_won(cur_choice):
+                    prev_player = player2 if prev_player == player1 else player1
                     print("Player {} has won the game!".format(prev_player))
                     break
 
@@ -149,13 +152,13 @@ class TicTacToe:
                     print("Match Draw!!!")
                     break
                 # swap the player
-                prev_player = player1 if prev_player == player1 else player2
+                prev_player = player2 if prev_player == player1 else player1
+
             # adjust with new line
             print()
 
         except:
             print("invalid input provided, please restart the game!")
-            raise
 
 
 # start the game
