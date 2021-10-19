@@ -1,32 +1,34 @@
     
 # PLAY TIC TAC TOE GAME
 class TicTacToe:
-
     def __init__(self):
         self.board = []
+        self.idx = 3
 
+    # create the board
     def create_board(self):
         self.board = [["_"]*3 for _ in range(3)]
     
+    # show the board
     def display_board(self):
-        for i in range(3):
-            for j in range(3):
+        for i in range(self.idx):
+            for j in range(self.idx):
                 print(self.board[i][j], end =" ")
             print()
         print()
 
+    # update the spot with provided symbol
     def update_spot(self, row, col, choice):
         self.board[row][col] = choice.upper()
 
     def is_player_won(self, choice):
-        print(self.board)
         choice = choice.upper()
         is_win = None
 
         # verify whether any row is full
-        for i in range(3):
+        for i in range(self.idx):
             is_win = True
-            for j in range(3):
+            for j in range(self.idx):
                 if self.board[i][j] != choice:
                     is_win = False
                     break
@@ -34,9 +36,9 @@ class TicTacToe:
                 return is_win
 
         # verify whether any col is full
-        for i in range(3):
+        for i in range(self.idx):
             is_win = True
-            for j in range(3):
+            for j in range(self.idx):
                 if self.board[j][i] != choice:
                     is_win = False
                     break
@@ -44,15 +46,15 @@ class TicTacToe:
                 return is_win
 
         # verify whether any diagonal is full
-        for i in range(3):
+        for i in range(self.idx):
             if self.board[i][i] != choice:
                 is_win = False
                 break
         if is_win:
             return is_win
 
-        for i in range(3):
-            if self.board[i][3 - 1 - i] != choice:
+        for i in range(self.idx):
+            if self.board[i][self.idx - 1 - i] != choice:
                 is_win = False
                 break
         if is_win:
@@ -68,20 +70,21 @@ class TicTacToe:
         return True
 
     def validate(self, row, col, prev, cur):
-        # validate existing entry
-        if (row < 0 or row > 2) or (col < 0 or col > 2):
+        # validate the index, row/col index is less than 0 or more than 2 is not accepted
+        if (row < 0 or row > self.idx-1) or (col < 0 or col > self.idx-1):
             print("invalid index entered, please try again.")
             return False
+        # verify whether index is already filled
         elif self.board[row][col] != "_":
             print("invalid entry, please try again")
             return False
-        if not prev:
-            return True
-        elif prev == cur or cur not in "XxoO":
+        # verify consecutive same symbol and invalid symbol
+        if prev == cur or cur not in "XxoO":
             print("Wrong player move or wrong choice entered(please use only X/x, O/o symbols)")
             return False
         return True
 
+    # start point 
     def start_game(self):  
         try :     
             # Get players name
@@ -100,8 +103,8 @@ class TicTacToe:
             # NOTE: in case if player 2 is starting the game, then it should work
             prev_player = player1
             prev_choice = None
-
             print()
+
             while True:
                 # get user input as row col chioce(ex: 1 2 X)
                 row, col, cur_choice = list(
@@ -109,7 +112,8 @@ class TicTacToe:
                 print()
                 
                 # validate the inputs, if something is wrong then give 3 retries
-                for i in range(1, 4):
+                max_try = 4
+                for i in range(1, max_try):
                     flag = self.validate(int(row)-1, int(col)-1, prev_choice, cur_choice)
                     if not flag and i < 4:
                         row, col, cur_choice = list(
@@ -119,6 +123,13 @@ class TicTacToe:
                     else:
                         print("you have reached max limit of 3 retries, please restart the game")
                         return
+                        # option to restart the game 
+                        # [TODO]
+                        # restart = input("do you want to restart the game ? Y/N")
+                        # if restart == "Y":
+                        #     self.start_game()
+                        # else:
+                        #     return 
 
                 prev_choice = cur_choice
 
@@ -137,13 +148,14 @@ class TicTacToe:
                 if self.is_board_filled():
                     print("Match Draw!!!")
                     break
+                # swap the player
                 prev_player = player1 if prev_player == player1 else player2
-
+            # adjust with new line
             print()
 
         except:
-            print("invalid input")
-            return
+            print("invalid input provided, please restart the game!")
+            raise
 
 
 # start the game
