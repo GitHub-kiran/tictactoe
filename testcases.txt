@@ -1,0 +1,59 @@
+# test cases
+TC1: 
+    player1 : Sam
+    player2 : Krish
+    1 1 x
+    2 3 o
+    2 2 x
+    3 2 o
+    3 3 x
+O/P : player Sam has won the game
+
+
+TC2: 
+    player1 : 
+    player2 : 
+    2 2 x
+    1 2 o
+    3 3 x
+    1 1 o
+    3 1 x
+    1 3 o
+O/P : player 2 has won the game
+
+
+TC3: 
+    player1 : 
+    player2 : 
+    2 2 x
+    1 2 o
+    3 3 
+O/P : invalid input provided, please restart the game!
+
+TC4: 
+    player1 : 
+    player2 : 
+    2 2 x
+    4 5 o
+O/P : invalid index entered, please try again!
+
+TC5: 
+    player1 : 
+    player2 : 
+    2 2 x
+    3 1 x
+O/P : Wrong player move or wrong choice entered(please use only X/x, O/o symbols)
+
+TC6: 
+    player1 : 
+    player2 : 
+    2 2 x
+    3 1 R
+O/P : Wrong player move or wrong choice entered(please use only X/x, O/o symbols)
+
+
+
+
+
+
+    
