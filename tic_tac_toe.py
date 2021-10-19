@@ -122,13 +122,13 @@ class TicTacToe:
                         row, col, cur_choice = list(
                         map(str, input("Enter row and column in format row col choice : ").split()))
                     elif flag:
-                        break
+                        break   
                     else:
                         print("you have reached max limit of 3 retries, please restart the game")
                         return
                         # [TODO] : option to restart the game 
                         # restart = input("do you want to restart the game, type Y/N ?")
-                        # if restart == "Y":
+                        # if restart.upper() == "Y":
                         #     self.start_game()
                         # else:
                         #     return 
