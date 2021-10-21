@@ -1,5 +1,6 @@
     
 # PLAY TIC TAC TOE GAME
+# NOTE: compatible on python 3+ version
 
 import random
 class TicTacToe:
