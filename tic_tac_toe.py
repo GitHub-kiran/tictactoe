@@ -1,5 +1,7 @@
     
 # PLAY TIC TAC TOE GAME
+
+import random
 class TicTacToe:
     def __init__(self):
         self.board = []
@@ -87,23 +89,27 @@ class TicTacToe:
             return False
         return True
 
+
     # start point 
-    def start_game(self):  
+    def start(self):
+        # Create 3*3 board filled with "_"
+        self.create_board()
+        self.display_board()
+    
+    def play_against_friend(self):  
         try :     
             # Get players name
             player1 = input("Enter first player name : ") 
             player2 = input("Enter second player name : ")
 
-            # Create 3*3 board filled with "_"
-            self.create_board()
-            self.display_board()
-
             # If players name is empty then 'player 1' will be first player and 'player 2' will be second player
             player1 = "Player 1" if not player1 else player1
             player2 = "Player 2" if not player2 else player2
             
-            # start with player 1
-            # NOTE: in case if player 2 is starting the game, then it should work
+            # create and display the board
+            self.start()
+
+            # start with random player
             prev_player = None
             prev_choice = None
             print()
@@ -129,7 +135,7 @@ class TicTacToe:
                         # [TODO] : option to restart the game 
                         # restart = input("do you want to restart the game, type Y/N ?")
                         # if restart.upper() == "Y":
-                        #     self.start_game()
+                        #     self.play_against_friend()
                         # else:
                         #     return 
 
@@ -160,8 +166,86 @@ class TicTacToe:
         except:
             print("invalid input provided, please restart the game!")
 
+    def play_against_computer(self):
+        try:
+            # Get player name
+            player1 = input("Enter first player name : ") 
+            player1 = "Player 1" if not player1 else player1
+            player2 = "computer"
+
+            # create and display the board
+            self.start()
+
+            # start with random player
+            prev_player = None
+            prev_choice = None
+            print()
+            random_moves = [(i,j) for i in range(1,4) for j in range(1,4)]
+
+            while True:
+                # get user input as row col chioce(ex: 1 2 X)
+                if not prev_player or prev_player is not player1:
+                    row, col, cur_choice = list(
+                        map(str, input("Enter row and column in format row col choice : ").split()))
+                    print()
+                    if (int(row), int(col)) in random_moves:
+                        del random_moves[random_moves.index((int(row), int(col)))]
+                else:
+                    move = random_moves.pop(random.randrange(len(random_moves)))
+                    row, col = move[1], move[0]
+                    cur_choice = "X" if prev_choice in "Oo" else "O"
+                
+                # validate the inputs, if input is wrong then give 3 retries
+                if not prev_player or prev_player is not player1:
+
+                    max_try = 4
+                    for i in range(1, max_try):
+                        flag = self.validate(int(row)-1, int(col)-1, prev_choice, cur_choice)
+                        if not flag and i < 4:
+                            row, col, cur_choice = list(
+                            map(str, input("Enter row and column in format row col choice : ").split()))
+                        elif flag:
+                            break   
+                        else:
+                            print("you have reached max limit of 3 retries, please restart the game")
+                            return
+
+                prev_choice = cur_choice
+
+                # update particular spot in the board
+                self.update_spot(int(row) - 1, int(col) - 1, cur_choice)
+
+                # Show latest baord
+                self.display_board()
+
+                # checking whether current player is won or not
+                if prev_player and self.is_player_won(cur_choice):
+                    prev_player = player2 if prev_player == player1 else player1
+                    print("Player {} has won the game!".format(prev_player))
+                    break
+
+                # checking whether the game is draw or not
+                if self.is_board_filled():
+                    print("Match Draw!!!")
+                    break
+                # swap the player
+                prev_player = player2 if prev_player == player1 else player1
+
+            # adjust with new line
+            print()
+
+        except:
+            print("invalid input provided, please restart the game!")
+            raise
+
 
 # start the game
 tic_tac_toe = TicTacToe()
-tic_tac_toe.start_game()
+play_option = input("Do you want to play with computer, type Y/Yes ? ")
+if play_option.upper() == "Y" or play_option.upper() == "YES":
+    tic_tac_toe.play_against_computer()
+else:
+    tic_tac_toe.play_against_friend()
+
+
 
